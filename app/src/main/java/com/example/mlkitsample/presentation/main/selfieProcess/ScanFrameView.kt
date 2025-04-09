@@ -35,7 +35,7 @@ class ScanFrameView @JvmOverloads constructor(
             strokeWidth, strokeWidth, width - strokeWidth, height - strokeWidth
         )
 
-        val innerRect = RectF(
+        RectF(
             outerRect.left + spacing, outerRect.top + spacing,
             outerRect.right - spacing, outerRect.bottom - spacing
         )

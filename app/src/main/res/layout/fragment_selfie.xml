@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.mlkitsample.selfieProcess.SelfieViewModel" />
+            type="com.example.mlkitsample.presentation.main.selfieProcess.SelfieViewModel" />
     </data>
 
     <RelativeLayout
@@ -63,7 +63,7 @@
                     android:layout_marginTop="@dimen/item_between_margin_top">
 
                     <!-- Custom UI Frame (Overlay) -->
-                    <com.example.mlkitsample.selfieProcess.ScanFrameView
+                    <com.example.mlkitsample.presentation.main.selfieProcess.ScanFrameView
                         android:id="@+id/scan_frame_view"
                         android:layout_width="300dp"
                         android:layout_height="300dp"
@@ -118,17 +118,6 @@
                     </com.google.android.material.card.MaterialCardView>
 
                 </FrameLayout>
-                <!--                <TextView-->
-                <!--                    android:layout_gravity="center"-->
-                <!--                    android:id="@+id/livenessText"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:text="Detecting..."-->
-                <!--                    android:textSize="12sp"-->
-                <!--                    android:textColor="@android:color/white"-->
-                <!--                    android:background="@color/colorCredit"-->
-                <!--                    android:padding="8dp"/>-->
-
 
                 <TextView
                     android:id="@+id/livenessText"
@@ -167,30 +156,9 @@
                     android:textColor="@color/colorPrimary"
                     android:image_visibility="@{viewModel.isPreviewVisible}"
                     />
-                <!--                <Button-->
-                <!--                    android:id="@+id/btn_take_photo"-->
-                <!--                    style="@style/ButtonContainedOutlineRed"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_gravity="center_horizontal"-->
-                <!--                    android:layout_marginTop="@dimen/item_between_margin_top"-->
-                <!--                    android:drawableLeft="@drawable/ic_front_camera"-->
-                <!--                    android:drawablePadding="@dimen/activity_horizontal_margin"-->
-                <!--                    android:letterSpacing="0"-->
-                <!--                    android:text="@{viewModel.isPreviewVisible ? @string/take_photo : @string/retake_photo}"-->
-                <!--                    android:textColor="@color/colorPrimary" />-->
-            </LinearLayout>
+              </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-        <!--        <Button-->
-        <!--            android:id="@+id/btn_next"-->
-        <!--            style="@style/Button"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_alignParentBottom="true"-->
-        <!--            android:layout_marginHorizontal="18dp"-->
-        <!--            android:layout_marginVertical="18dp"-->
-        <!--            android:enabled="@{viewModel.capturedImageUri != null}"-->
-        <!--            android:text="@string/submit" />-->
+
     </RelativeLayout>
 
 

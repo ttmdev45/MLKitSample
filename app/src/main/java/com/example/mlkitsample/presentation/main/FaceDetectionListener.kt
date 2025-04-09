@@ -1,4 +1,4 @@
-package com.example.mlkitsample
+package com.example.mlkitsample.presentation.main
 
 import com.google.mlkit.vision.face.Face
 

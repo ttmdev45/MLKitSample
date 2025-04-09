@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.mlkitsample.databinding.ActivityMainBinding
+import com.example.mlkitsample.domain.model.FaceAction
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
@@ -275,6 +276,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun requestNextFaceAction(){
         currentAction = FaceAction.entries.random()
         actionCompleted = false

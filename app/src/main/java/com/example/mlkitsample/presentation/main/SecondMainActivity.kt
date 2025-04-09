@@ -1,13 +1,13 @@
-package com.example.mlkitsample
+package com.example.mlkitsample.presentation.main
 
 import android.os.Bundle
-import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.mlkitsample.R
 import com.example.mlkitsample.databinding.ActivitySecondMainBinding
-import com.example.mlkitsample.selfieProcess.SelfieFragment
+import com.example.mlkitsample.presentation.main.selfieProcess.SelfieFragment
 
 class SecondMainActivity : AppCompatActivity() {
 
@@ -33,4 +33,3 @@ class SecondMainActivity : AppCompatActivity() {
         }
     }
 }
-

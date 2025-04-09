@@ -1,10 +1,9 @@
-package com.example.mlkitsample
+package com.example.mlkitsample.presentation.main
 
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.bumptech.glide.Glide
 
 @BindingAdapter("android:preview_visibility")
 fun setVisibility(view: View, isVisible: Boolean) {

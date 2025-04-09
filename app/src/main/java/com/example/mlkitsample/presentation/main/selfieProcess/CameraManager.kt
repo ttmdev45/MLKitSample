@@ -1,4 +1,4 @@
-package com.example.mlkitsample.selfieProcess
+package com.example.mlkitsample.presentation.main.selfieProcess
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,7 +17,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import com.example.mlkitsample.FaceDetectionListener
+import com.example.mlkitsample.presentation.main.FaceDetectionListener
 import com.example.mlkitsample.data.repository.CameraRepositoryImpl
 import com.example.mlkitsample.databinding.FragmentSelfieBinding
 import com.example.mlkitsample.domain.model.FaceAction

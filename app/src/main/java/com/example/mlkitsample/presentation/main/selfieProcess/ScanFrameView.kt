@@ -1,4 +1,4 @@
-package com.example.mlkitsample.selfieProcess
+package com.example.mlkitsample.presentation.main.selfieProcess
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,6 +9,7 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.graphics.toColorInt
 
 class ScanFrameView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -20,14 +21,8 @@ class ScanFrameView @JvmOverloads constructor(
     private val cornerStrokeSize = 80f // **Equal size for all four corners**
     private val spacing = 30f // Space between red and blue strokes
 
-    private val fullStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#902BAAD8")
-        style = Paint.Style.STROKE
-        strokeWidth = this@ScanFrameView.strokeWidth
-    }
-
     private val cornerStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#902BAAD8")
+        color = "#902BAAD8".toColorInt()
         style = Paint.Style.STROKE
         strokeWidth = this@ScanFrameView.strokeWidth
     }

@@ -1,4 +1,4 @@
-package com.example.mlkitsample.selfieProcess
+package com.example.mlkitsample.presentation.main.selfieProcess
 
 import android.net.Uri
 import android.util.Log

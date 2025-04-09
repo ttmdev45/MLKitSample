@@ -1,10 +1,8 @@
-package com.example.mlkitsample.selfieProcess
-import android.util.Log
+package com.example.mlkitsample.presentation.main.selfieProcess
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -17,11 +15,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import com.example.mlkitsample.FaceDetectionListener
+import com.example.mlkitsample.presentation.main.FaceDetectionListener
 import com.example.mlkitsample.R
 import com.example.mlkitsample.databinding.FragmentSelfieBinding
 import com.google.mlkit.vision.face.Face
-import java.util.concurrent.Executors
 import androidx.core.graphics.drawable.toDrawable
 
 class SelfieFragment : Fragment(), FaceDetectionListener {

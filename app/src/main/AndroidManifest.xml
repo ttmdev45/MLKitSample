@@ -23,7 +23,7 @@
         android:theme="@style/Theme.MLKitSample"
         tools:targetApi="31">
         <activity
-            android:name=".SecondMainActivity"
+            android:name=".presentation.main.SecondMainActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

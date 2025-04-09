@@ -1,0 +1,40 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.MLKitSample" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.MLKitSample" parent="Base.Theme.MLKitSample" />
+
+    <style name="Headline3">
+        <item name="android:fontFamily">@font/rubik_medium</item>
+        <item name="android:textSize">@dimen/font_size_headline_3</item>
+        <item name="android:textColor">@color/colorCaption</item>
+    </style>
+
+
+    <style name="Body3">
+        <item name="android:fontFamily">@font/rubik</item>
+        <item name="android:textSize">@dimen/font_size_body_3</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
+
+    <style name="Body2Bold">
+        <item name="android:fontFamily">@font/rubik</item>
+        <item name="android:textSize">@dimen/font_size_body_2</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
+
+    <style name="ButtonContainedOutlineRed" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:fontFamily">@font/rubik_medium</item>
+        <item name="android:textSize">@dimen/font_size_body_3</item>
+        <item name="android:textColor">@color/btnTextColor</item>
+        <item name="strokeColor">#902BAAD8</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:padding">@dimen/back_button_margin</item>
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+</resources>

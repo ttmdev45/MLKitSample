@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.example.mlkitsample.selfieProcess.SelfieViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F6F6F6"
+        android:orientation="vertical">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="?actionBarSize">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                android:paddingVertical="@dimen/item_between_margin_top">
+
+                <TextView
+                    style="@style/Headline3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="@dimen/card_margin"
+                    android:text="Verify your identity" />
+
+                <TextView
+                    android:id="@+id/txt_desc_one"
+                    style="@style/Body3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/item_between_margin_top"
+                    android:paddingVertical="@dimen/card_margin"
+                    android:text="Please take a clear selfie in a well-lighted area, ensuring your face is fully visible without any obstructions." />
+
+                <TextView
+                    android:id="@+id/txt_desc_two"
+                    style="@style/Body2Bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/item_between_margin_top"
+                    android:paddingVertical="@dimen/card_margin"
+                    android:text="Face forward and make sure your face is clearly visible."
+                    android:textAlignment="center" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/item_between_margin_top">
+
+                    <!-- Custom UI Frame (Overlay) -->
+                    <com.example.mlkitsample.selfieProcess.ScanFrameView
+                        android:id="@+id/scan_frame_view"
+                        android:layout_width="300dp"
+                        android:layout_height="300dp"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent" />
+
+                    <!-- Camera Preview -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/mcv_preview_view"
+                        android:layout_width="260dp"
+                        android:layout_height="260dp"
+                        android:layout_gravity="center"
+                        android:preview_visibility="@{viewModel.isPreviewVisible}"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="#902BAAD8"
+                        app:strokeWidth="3dp">
+
+                        <!--                        android:visibility="@{viewModel.isPreviewVisible ? View.VISIBLE : View.GONE}"-->
+
+                        <androidx.camera.view.PreviewView
+                            android:id="@+id/preview_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Photo Taken -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/mcv_selfie_image"
+                        android:layout_width="260dp"
+                        android:layout_height="260dp"
+                        android:layout_gravity="center"
+                        android:image_visibility="@{viewModel.isPreviewVisible}"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="#902BAAD8"
+                        app:strokeWidth="3dp">
+
+                        <!--                        android:visibility="@{viewModel.isPreviewVisible ? View.GONE : View.VISIBLE}"-->
+
+                        <ImageView
+                            android:id="@+id/iv_selfie_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:scaleType="centerCrop"
+                            app:imageUri="@{viewModel.capturedImageUri}" />
+
+                        <!--                        app:imageUri="@{viewModel.capturedImageUri}"-->
+                    </com.google.android.material.card.MaterialCardView>
+
+                </FrameLayout>
+                <!--                <TextView-->
+                <!--                    android:layout_gravity="center"-->
+                <!--                    android:id="@+id/livenessText"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:text="Detecting..."-->
+                <!--                    android:textSize="12sp"-->
+                <!--                    android:textColor="@android:color/white"-->
+                <!--                    android:background="@color/colorCredit"-->
+                <!--                    android:padding="8dp"/>-->
+
+
+                <TextView
+                    android:id="@+id/livenessText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/item_between_margin_top"
+                    android:drawablePadding="@dimen/activity_horizontal_margin"
+                    android:textColor="#902BAAD8"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btn_ready"
+                    style="@style/ButtonContainedOutlineRed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/item_between_margin_top"
+                    android:drawablePadding="@dimen/activity_horizontal_margin"
+                    android:letterSpacing="0"
+                    android:text="Start Detect"
+                    android:textColor="#902BAAD8"
+                    android:preview_visibility="@{viewModel.isPreviewVisible}"
+                    />
+
+                <Button
+                    android:id="@+id/btn_try_again"
+                    style="@style/ButtonContainedOutlineRed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/item_between_margin_top"
+                    android:drawablePadding="@dimen/activity_horizontal_margin"
+                    android:letterSpacing="0"
+                    android:text="Try Again"
+                    android:textColor="@color/colorPrimary"
+                    android:image_visibility="@{viewModel.isPreviewVisible}"
+                    />
+                <!--                <Button-->
+                <!--                    android:id="@+id/btn_take_photo"-->
+                <!--                    style="@style/ButtonContainedOutlineRed"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_gravity="center_horizontal"-->
+                <!--                    android:layout_marginTop="@dimen/item_between_margin_top"-->
+                <!--                    android:drawableLeft="@drawable/ic_front_camera"-->
+                <!--                    android:drawablePadding="@dimen/activity_horizontal_margin"-->
+                <!--                    android:letterSpacing="0"-->
+                <!--                    android:text="@{viewModel.isPreviewVisible ? @string/take_photo : @string/retake_photo}"-->
+                <!--                    android:textColor="@color/colorPrimary" />-->
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+        <!--        <Button-->
+        <!--            android:id="@+id/btn_next"-->
+        <!--            style="@style/Button"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_alignParentBottom="true"-->
+        <!--            android:layout_marginHorizontal="18dp"-->
+        <!--            android:layout_marginVertical="18dp"-->
+        <!--            android:enabled="@{viewModel.capturedImageUri != null}"-->
+        <!--            android:text="@string/submit" />-->
+    </RelativeLayout>
+
+
+</layout>

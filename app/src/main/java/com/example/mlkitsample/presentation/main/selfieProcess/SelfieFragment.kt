@@ -208,10 +208,6 @@ class SelfieFragment : Fragment(), FaceDetectionListener {
 
     }
 
-    override fun onActionProgress(msg: String) {
-        binding.livenessText.text = "$msg \u2705"
-        binding.livenessText.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.holo_green_light))
-    }
     override fun onDetectActionCompleted(msg: String) {
         binding.livenessText.text = msg
         takePhoto()
@@ -219,15 +215,11 @@ class SelfieFragment : Fragment(), FaceDetectionListener {
 
     override fun onSuccessUpload(msg: String) {
         binding.livenessText.text = msg
-       // binding.btnTryAgain.visibility = View.VISIBLE
-      //  binding.btnReady.visibility = View.GONE
         hideLoader()
     }
 
     override fun onFailUpload(msg: String) {
         binding.livenessText.text = msg
-       // binding.btnTryAgain.visibility = View.VISIBLE
-      //  binding.btnReady.visibility = View.GONE
         hideLoader()
     }
 

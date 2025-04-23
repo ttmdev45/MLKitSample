@@ -117,53 +117,63 @@ class CameraManager(
                 imageProxy.close()
             }
     }
-
-
-        private fun checkLiveness(face: Face) {
+    private fun checkLiveness(face: Face) {
         val leftEyeOpenProb = face.leftEyeOpenProbability ?: 1.0f
         val rightEyeOpenProb = face.rightEyeOpenProbability ?: 1.0f
         val smilingProb = face.smilingProbability ?: 0.0f
-        val headYaw = face.headEulerAngleY
-       // val headYawX = face.headEulerAngleX //   val eyeState = detectEyeState(leftEyeOpenProb,rightEyeOpenProb)
-       // Log.d("EyeState", "Detected: $eyeState")
+        val headYaw = face.headEulerAngleY  // Left/Right
+        val headPitch = face.headEulerAngleX // Up/Down
 
+        if (actionCompleted) return
 
-            if (actionCompleted) return
-
-            when (currentAction) {
+        when (currentAction) {
             FaceAction.LEFT_EYE_CLOSE -> {
-                if (leftEyeOpenProb == 0.0f ) {
+                if (leftEyeOpenProb <= 0.0f) {
                     onActionCompleted("Detected: left eye closed")
-                } else if (smilingProb > 0.7f || abs(headYaw) > 15) {
+                } else {
                     onActionWrong("Wrong action! Expected: left eye closed")
                 }
             }
-                FaceAction.RIGHT_EYE_CLOSE -> {
-                    if (rightEyeOpenProb == 0.0f ) {
-                        onActionCompleted("Detected: right eye closed")
-                    } else if (smilingProb > 0.7f || abs(headYaw) > 15) {
-                        onActionWrong("Wrong action! Expected: right eye closed")
-                    }
+
+            FaceAction.RIGHT_EYE_CLOSE -> {
+                if (rightEyeOpenProb <= 0.0f) {
+                    onActionCompleted("Detected: right eye closed")
+                } else {
+                    onActionWrong("Wrong action! Expected: right eye closed")
                 }
+            }
 
             FaceAction.SMILE -> {
                 if (smilingProb > 0.7f) {
-                    onActionCompleted("Smile detected!")
+                    onActionCompleted("Detected: Smile")
                 } else if ((leftEyeOpenProb < 0.4f && rightEyeOpenProb < 0.4f) || abs(headYaw) > 15) {
                     onActionWrong("Wrong action! Expected: Smile")
                 }
-
             }
+
             FaceAction.HEAD_SHAKE -> {
+                // Detect head shake (left ↔ right)
                 if (abs(headYaw) > 15) {
-                    onActionCompleted("Head shake detected!")
-                } else if ((leftEyeOpenProb < 0.4f && rightEyeOpenProb < 0.4f) || smilingProb > 0.7f) {
-                    onActionWrong("Wrong action! Expected: Head shake")
+                    onActionCompleted("Detected: Head shake (left ↔ right)")
+                } else {
+                    onActionWrong("Wrong action! Expected: Head shake (left ↔ right)")
                 }
             }
+
+            FaceAction.HEAD_NOD -> {
+                // Detect head nod (up ↕ down)
+                if (abs(headPitch) > 10) {
+                    onActionCompleted("Detected: Head nod (up ↕ down)")
+                } else {
+                    onActionWrong("Wrong action! Expected: Head nod (up ↕ down)")
+                }
+            }
+
             else -> {}
         }
     }
+
+
     private val faceDetector by lazy {
         FaceDetection.getClient(
             FaceDetectorOptions.Builder()
@@ -204,33 +214,30 @@ class CameraManager(
 
 
     }
-
-    fun requestNextFaceAction(){
+    fun requestNextFaceAction() {
         currentAction = useCase.requestNextAction()
         actionCompleted = false
-        when (currentAction) {
-           // FaceAction.BLINK -> faceDetectionListener.onRequestMessage("Please blink your eyes.")
-            FaceAction.SMILE -> faceDetectionListener.onRequestMessage("Please smile.")
-            FaceAction.HEAD_SHAKE -> faceDetectionListener.onRequestMessage("Please shake your head.")
-            FaceAction.LEFT_EYE_CLOSE -> faceDetectionListener.onRequestMessage("Please left eye close.")
-            FaceAction.RIGHT_EYE_CLOSE -> faceDetectionListener.onRequestMessage("Please right eye close.")
 
-            else -> {
+        val message = when (currentAction) {
+            FaceAction.SMILE -> "Please smile 😊."
+            FaceAction.HEAD_SHAKE -> "Please shake your head (left ↔ right)."
+            FaceAction.LEFT_EYE_CLOSE -> "Please close your left eye 👁️."
+            FaceAction.RIGHT_EYE_CLOSE -> "Please close your right eye 👁️."
+            FaceAction.HEAD_NOD -> "Please nod your head (up ↕ down)."
+            // You can add more actions here as needed
+            else -> null
+        }
 
-            }
+        message?.let {
+            faceDetectionListener.onRequestMessage(it)
         }
     }
+
 
     fun resetLiveness() {
         completedActions = 0
         currentAction = null
         actionCompleted = false
-    }
-
-    private fun onActionInProgress(message: String) {
-        // You can show a Toast, update a TextView, or log it
-        faceDetectionListener.onActionProgress(message)
-        // Or update a visible UI status label
     }
 
     private fun onActionWrong(message: String) {

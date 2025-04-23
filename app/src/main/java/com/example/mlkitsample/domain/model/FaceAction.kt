@@ -5,6 +5,7 @@ enum class FaceAction {
     SMILE,
     HEAD_SHAKE,
     LEFT_EYE_CLOSE,
-    RIGHT_EYE_CLOSE
+    RIGHT_EYE_CLOSE,
+    HEAD_NOD
 
 }

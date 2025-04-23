@@ -125,6 +125,8 @@ class SelfieFragment : Fragment(), FaceDetectionListener {
 //        }
 
         binding.btnReady.setOnClickListener {
+
+
             cameraManager.resetLiveness()
             Handler(Looper.getMainLooper()).postDelayed({
                 cameraManager.requestNextFaceAction()
@@ -206,6 +208,10 @@ class SelfieFragment : Fragment(), FaceDetectionListener {
 
     }
 
+    override fun onActionProgress(msg: String) {
+        binding.livenessText.text = "$msg \u2705"
+        binding.livenessText.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.holo_green_light))
+    }
     override fun onDetectActionCompleted(msg: String) {
         binding.livenessText.text = msg
         takePhoto()

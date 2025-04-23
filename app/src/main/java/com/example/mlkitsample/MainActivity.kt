@@ -157,27 +157,27 @@ class MainActivity : AppCompatActivity() {
         if (actionCompleted) return
        // Log.d("main act","check actionCompleted status $actionCompleted  $currentAction")
         when (currentAction) {
-            FaceAction.BLINK -> {
-                if (leftEyeOpenProb < 0.4f && rightEyeOpenProb < 0.4f) {
-                    onActionCompleted("Blink detected!")
-                } else if (smilingProb > 0.7f || abs(headYaw) > 15) {
-                    onActionWrong("Wrong action! Expected: Blink")
-                }
-            }
-            FaceAction.SMILE -> {
-                if (smilingProb > 0.7f) {
-                    onActionCompleted("Smile detected!")
-                } else if ((leftEyeOpenProb < 0.4f && rightEyeOpenProb < 0.4f) || abs(headYaw) > 15) {
-                    onActionWrong("Wrong action! Expected: Smile")
-                }
-            }
-            FaceAction.HEAD_SHAKE -> {
-                if (abs(headYaw) > 15) {
-                    onActionCompleted("Head shake detected!")
-                } else if ((leftEyeOpenProb < 0.4f && rightEyeOpenProb < 0.4f) || smilingProb > 0.7f) {
-                    onActionWrong("Wrong action! Expected: Head shake")
-                }
-            }
+//            FaceAction.BLINK -> {
+//                if (leftEyeOpenProb < 0.4f && rightEyeOpenProb < 0.4f) {
+//                    onActionCompleted("Blink detected!")
+//                } else if (smilingProb > 0.7f || abs(headYaw) > 15) {
+//                    onActionWrong("Wrong action! Expected: Blink")
+//                }
+//            }
+//            FaceAction.SMILE -> {
+//                if (smilingProb > 0.7f) {
+//                    onActionCompleted("Smile detected!")
+//                } else if ((leftEyeOpenProb < 0.4f && rightEyeOpenProb < 0.4f) || abs(headYaw) > 15) {
+//                    onActionWrong("Wrong action! Expected: Smile")
+//                }
+//            }
+//            FaceAction.HEAD_SHAKE -> {
+//                if (abs(headYaw) > 15) {
+//                    onActionCompleted("Head shake detected!")
+//                } else if ((leftEyeOpenProb < 0.4f && rightEyeOpenProb < 0.4f) || smilingProb > 0.7f) {
+//                    onActionWrong("Wrong action! Expected: Head shake")
+//                }
+//            }
             else -> {}
         }
     }
@@ -281,9 +281,9 @@ class MainActivity : AppCompatActivity() {
         currentAction = FaceAction.entries.random()
         actionCompleted = false
         when (currentAction) {
-            FaceAction.BLINK -> binding.livenessText.text = "Please blink your eyes."
-            FaceAction.SMILE -> binding.livenessText.text = "Please smile."
-            FaceAction.HEAD_SHAKE -> binding.livenessText.text = "Please shake your head."
+           // FaceAction.BLINK -> binding.livenessText.text = "Please blink your eyes."
+         //  FaceAction.SMILE -> binding.livenessText.text = "Please smile."
+          //  FaceAction.HEAD_SHAKE -> binding.livenessText.text = "Please shake your head."
             else -> {
 
             }

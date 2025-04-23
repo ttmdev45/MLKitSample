@@ -7,6 +7,8 @@ interface FaceDetectionListener {
     fun onRequestMessage(msg: String)
     fun onActionCompleted(msg: String)
     fun onActionWrong(msg: String)
+    fun onActionProgress(msg: String)
+
     fun onDetectActionCompleted(msg: String)
 
     fun onSuccessUpload(msg: String)

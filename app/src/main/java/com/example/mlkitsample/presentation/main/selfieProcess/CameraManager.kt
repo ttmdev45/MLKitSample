@@ -20,6 +20,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.example.mlkitsample.presentation.main.FaceDetectionListener
 import com.example.mlkitsample.data.repository.CameraRepositoryImpl
 import com.example.mlkitsample.databinding.FragmentSelfieBinding
+import com.example.mlkitsample.domain.model.EyeState
 import com.example.mlkitsample.domain.model.FaceAction
 import com.example.mlkitsample.domain.usecase.LivenessUseCase
 import com.google.mlkit.vision.common.InputImage
@@ -110,33 +111,48 @@ class CameraManager(
                     checkLiveness(face)
                     faceDetectionListener.onFaceDetected(face)
                 }
+
             }
             .addOnCompleteListener {
                 imageProxy.close()
             }
     }
-    private fun checkLiveness(face: Face) {
+
+
+        private fun checkLiveness(face: Face) {
         val leftEyeOpenProb = face.leftEyeOpenProbability ?: 1.0f
         val rightEyeOpenProb = face.rightEyeOpenProbability ?: 1.0f
         val smilingProb = face.smilingProbability ?: 0.0f
         val headYaw = face.headEulerAngleY
+       // val headYawX = face.headEulerAngleX //   val eyeState = detectEyeState(leftEyeOpenProb,rightEyeOpenProb)
+       // Log.d("EyeState", "Detected: $eyeState")
 
-        if (actionCompleted) return
-         Log.d("main act","check actionCompleted status $actionCompleted  $currentAction")
-        when (currentAction) {
-            FaceAction.BLINK -> {
-                if (leftEyeOpenProb < 0.4f && rightEyeOpenProb < 0.4f) {
-                    onActionCompleted("Blink detected!")
+
+            if (actionCompleted) return
+
+            when (currentAction) {
+            FaceAction.LEFT_EYE_CLOSE -> {
+                if (leftEyeOpenProb == 0.0f ) {
+                    onActionCompleted("Detected: left eye closed")
                 } else if (smilingProb > 0.7f || abs(headYaw) > 15) {
-                    onActionWrong("Wrong action! Expected: Blink")
+                    onActionWrong("Wrong action! Expected: left eye closed")
                 }
             }
+                FaceAction.RIGHT_EYE_CLOSE -> {
+                    if (rightEyeOpenProb == 0.0f ) {
+                        onActionCompleted("Detected: right eye closed")
+                    } else if (smilingProb > 0.7f || abs(headYaw) > 15) {
+                        onActionWrong("Wrong action! Expected: right eye closed")
+                    }
+                }
+
             FaceAction.SMILE -> {
                 if (smilingProb > 0.7f) {
                     onActionCompleted("Smile detected!")
                 } else if ((leftEyeOpenProb < 0.4f && rightEyeOpenProb < 0.4f) || abs(headYaw) > 15) {
                     onActionWrong("Wrong action! Expected: Smile")
                 }
+
             }
             FaceAction.HEAD_SHAKE -> {
                 if (abs(headYaw) > 15) {
@@ -152,6 +168,7 @@ class CameraManager(
         FaceDetection.getClient(
             FaceDetectorOptions.Builder()
                 .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+                .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
                 .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
                 .enableTracking()
                 .build()
@@ -192,9 +209,11 @@ class CameraManager(
         currentAction = useCase.requestNextAction()
         actionCompleted = false
         when (currentAction) {
-            FaceAction.BLINK -> faceDetectionListener.onRequestMessage("Please blink your eyes.")
+           // FaceAction.BLINK -> faceDetectionListener.onRequestMessage("Please blink your eyes.")
             FaceAction.SMILE -> faceDetectionListener.onRequestMessage("Please smile.")
             FaceAction.HEAD_SHAKE -> faceDetectionListener.onRequestMessage("Please shake your head.")
+            FaceAction.LEFT_EYE_CLOSE -> faceDetectionListener.onRequestMessage("Please left eye close.")
+            FaceAction.RIGHT_EYE_CLOSE -> faceDetectionListener.onRequestMessage("Please right eye close.")
 
             else -> {
 
@@ -207,6 +226,13 @@ class CameraManager(
         currentAction = null
         actionCompleted = false
     }
+
+    private fun onActionInProgress(message: String) {
+        // You can show a Toast, update a TextView, or log it
+        faceDetectionListener.onActionProgress(message)
+        // Or update a visible UI status label
+    }
+
     private fun onActionWrong(message: String) {
 
         faceDetectionListener.onActionWrong(message)
@@ -247,6 +273,32 @@ class CameraManager(
             SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis()) + ".jpg"
         )
     }
+
+    private fun detectEyeState(
+        leftEyeProb: Float?,
+        rightEyeProb: Float?,
+        minConfidence: Float = 0.6f
+    ): EyeState {
+
+        Log.d("cameraManger","leftEyeProb $leftEyeProb rightEyeProb $rightEyeProb")
+
+
+        if (leftEyeProb == null || rightEyeProb == null) return EyeState.UNKNOWN
+
+        // Additional check for impossible eye probabilities
+        if (leftEyeProb < 0f || rightEyeProb < 0f || leftEyeProb > 1f || rightEyeProb > 1f) {
+            return EyeState.UNKNOWN
+        }
+
+        return when {
+            leftEyeProb < minConfidence && rightEyeProb > minConfidence -> EyeState.LEFT_CLOSED
+            leftEyeProb > minConfidence && rightEyeProb < minConfidence -> EyeState.RIGHT_CLOSED
+            leftEyeProb < minConfidence && rightEyeProb < minConfidence -> EyeState.BOTH_CLOSED
+            leftEyeProb > minConfidence && rightEyeProb > minConfidence -> EyeState.BOTH_OPEN
+            else -> EyeState.UNKNOWN
+        }
+    }
+
 }
 
 

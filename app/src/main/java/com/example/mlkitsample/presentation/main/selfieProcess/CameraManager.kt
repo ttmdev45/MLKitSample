@@ -127,21 +127,21 @@ class CameraManager(
         if (actionCompleted) return
 
         when (currentAction) {
-            FaceAction.LEFT_EYE_CLOSE -> {
-                if (leftEyeOpenProb <= 0.0f) {
-                    onActionCompleted("Detected: left eye closed")
-                } else {
-                    onActionWrong("Wrong action! Expected: left eye closed")
-                }
-            }
-
-            FaceAction.RIGHT_EYE_CLOSE -> {
-                if (rightEyeOpenProb <= 0.0f) {
-                    onActionCompleted("Detected: right eye closed")
-                } else {
-                    onActionWrong("Wrong action! Expected: right eye closed")
-                }
-            }
+//            FaceAction.LEFT_EYE_CLOSE -> {
+//                if (leftEyeOpenProb <= 0.0f) {
+//                    onActionCompleted("Detected: left eye closed")
+//                } else {
+//                    onActionWrong("Wrong action! Expected: left eye closed")
+//                }
+//            }
+//
+//            FaceAction.RIGHT_EYE_CLOSE -> {
+//                if (rightEyeOpenProb <= 0.0f) {
+//                    onActionCompleted("Detected: right eye closed")
+//                } else {
+//                    onActionWrong("Wrong action! Expected: right eye closed")
+//                }
+//            }
 
             FaceAction.SMILE -> {
                 if (smilingProb > 0.7f) {
@@ -160,14 +160,14 @@ class CameraManager(
                 }
             }
 
-            FaceAction.HEAD_NOD -> {
-                // Detect head nod (up ↕ down)
-                if (abs(headPitch) > 10) {
-                    onActionCompleted("Detected: Head nod (up ↕ down)")
-                } else {
-                    onActionWrong("Wrong action! Expected: Head nod (up ↕ down)")
-                }
-            }
+//            FaceAction.HEAD_NOD -> {
+//                // Detect head nod (up ↕ down)
+//                if (abs(headPitch) > 10) {
+//                    onActionCompleted("Detected: Head nod (up ↕ down)")
+//                } else {
+//                    onActionWrong("Wrong action! Expected: Head nod (up ↕ down)")
+//                }
+//            }
 
             else -> {}
         }
@@ -221,9 +221,9 @@ class CameraManager(
         val message = when (currentAction) {
             FaceAction.SMILE -> "Please smile 😊."
             FaceAction.HEAD_SHAKE -> "Please shake your head (left ↔ right)."
-            FaceAction.LEFT_EYE_CLOSE -> "Please close your left eye 👁️."
-            FaceAction.RIGHT_EYE_CLOSE -> "Please close your right eye 👁️."
-            FaceAction.HEAD_NOD -> "Please nod your head (up ↕ down)."
+           // FaceAction.LEFT_EYE_CLOSE -> "Please close your left eye 👁️."
+          //  FaceAction.RIGHT_EYE_CLOSE -> "Please close your right eye 👁️."
+           // FaceAction.HEAD_NOD -> "Please nod your head (up ↕ down)."
             // You can add more actions here as needed
             else -> null
         }

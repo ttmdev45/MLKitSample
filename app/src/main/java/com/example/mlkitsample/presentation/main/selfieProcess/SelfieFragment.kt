@@ -1,4 +1,5 @@
 package com.example.mlkitsample.presentation.main.selfieProcess
+
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
@@ -20,12 +21,13 @@ import com.example.mlkitsample.R
 import com.example.mlkitsample.databinding.FragmentSelfieBinding
 import com.google.mlkit.vision.face.Face
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.toColorInt
 
 class SelfieFragment : Fragment(), FaceDetectionListener {
 
     private lateinit var binding: FragmentSelfieBinding
     private val selfieViewModel: SelfieViewModel by activityViewModels()
-    private lateinit var cameraManager: CameraManager
+    private lateinit var cameraManager: FaceDetectCameraManager
     private var loadingDialog: AlertDialog? = null
 
 
@@ -35,9 +37,9 @@ class SelfieFragment : Fragment(), FaceDetectionListener {
     ): View? {
 
         binding = FragmentSelfieBinding.inflate(
-            inflater,container,false
+            inflater, container, false
         )
-        cameraManager = CameraManager(
+        cameraManager = FaceDetectCameraManager(
             requireContext(),
             viewLifecycleOwner,
             binding,
@@ -70,17 +72,17 @@ class SelfieFragment : Fragment(), FaceDetectionListener {
     }
 
 
-    private fun requestCameraPermission(){
-        when{
+    private fun requestCameraPermission() {
+        when {
             ContextCompat.checkSelfPermission(
                 requireContext(),
-               Manifest.permission.CAMERA
+                Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED -> {
                 selfieViewModel.setCameraActive(true)
             }
 
-            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)->{
-                Toast.makeText(context,"Camera permission is needed!", Toast.LENGTH_SHORT).show()
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                Toast.makeText(context, "Camera permission is needed!", Toast.LENGTH_SHORT).show()
                 permissionLauncher.launch(Manifest.permission.CAMERA)
             }
 
@@ -91,25 +93,23 @@ class SelfieFragment : Fragment(), FaceDetectionListener {
     }
 
     private val permissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGranted->
-            if(isGranted)
-            {
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
                 selfieViewModel.setCameraActive(true)
-            }
-            else{
+            } else {
                 Toast.makeText(context, "Camera permission is required!", Toast.LENGTH_LONG)
                     .show()
             }
         }
 
-    private fun setupObservers(){
-        selfieViewModel.isCameraActive.observe(viewLifecycleOwner){ isActive->
+    private fun setupObservers() {
+        selfieViewModel.isCameraActive.observe(viewLifecycleOwner) { isActive ->
 
-            if(isActive) cameraManager.startCamera() else cameraManager.stopCamera()
+            if (isActive) cameraManager.startCamera() else cameraManager.stopCamera()
         }
     }
 
-    private fun actions(){
+    private fun actions() {
 
 //        binding.btnReady.setOnClickListener {
 //
@@ -129,14 +129,15 @@ class SelfieFragment : Fragment(), FaceDetectionListener {
 
             cameraManager.resetLiveness()
             Handler(Looper.getMainLooper()).postDelayed({
-                cameraManager.requestNextFaceAction()
+                cameraManager.startFaceDetection()
+                //  cameraManager.requestNextFaceAction()
                 binding.btnReady.visibility = View.GONE
             }, 1000)
         }
 
         binding.btnTryAgain.setOnClickListener {
             retakePhoto()
-          //  cameraManager.startCamera()
+            //  cameraManager.startCamera()
         }
 
     }
@@ -148,11 +149,13 @@ class SelfieFragment : Fragment(), FaceDetectionListener {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             showLoader()
+            cameraManager.stopFaceDetection()
             cameraManager.takePhoto()
         } else {
             requestCameraPermission()
         }
     }
+
     private fun retakePhoto() {
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -168,6 +171,7 @@ class SelfieFragment : Fragment(), FaceDetectionListener {
         }
 
     }
+
     override fun onDestroy() {
         super.onDestroy()
         selfieViewModel.onClearedForSelfieForm()
@@ -182,6 +186,7 @@ class SelfieFragment : Fragment(), FaceDetectionListener {
 
         loadingDialog?.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
     }
+
     fun hideLoader() {
         loadingDialog?.dismiss()
     }
@@ -191,20 +196,34 @@ class SelfieFragment : Fragment(), FaceDetectionListener {
     }
 
     override fun onRequestMessage(msg: String) {
+
+        binding.livenessText.setTextColor(
+            "#902BAAD8".toColorInt()
+        )
         binding.livenessText.text = msg
     }
 
     @SuppressLint("SetTextI18n")
     override fun onActionCompleted(msg: String) {
         binding.livenessText.text = "$msg \u2705"
-        binding.livenessText.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.holo_green_light))
+        binding.livenessText.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                android.R.color.holo_green_light
+            )
+        )
 
     }
 
     @SuppressLint("SetTextI18n")
     override fun onActionWrong(msg: String) {
         binding.livenessText.text = "$msg \u274C"
-        binding.livenessText.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.holo_red_light))
+        binding.livenessText.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                android.R.color.holo_red_light
+            )
+        )
 
     }
 
@@ -221,6 +240,50 @@ class SelfieFragment : Fragment(), FaceDetectionListener {
     override fun onFailUpload(msg: String) {
         binding.livenessText.text = msg
         hideLoader()
+    }
+
+    override fun onNoFaceDetected(msg: String) {
+        binding.livenessText.text = "$msg \u274C"
+        binding.livenessText.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                android.R.color.holo_red_light
+            )
+        )
+
+    }
+
+    override fun onMultipleFaceDetected(msg: String) {
+        binding.livenessText.text = "$msg \u274C"
+        binding.livenessText.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                android.R.color.holo_red_light
+            )
+        )
+
+    }
+
+    override fun onFaceNotCentered(msg: String) {
+        binding.livenessText.text = "$msg \u274C"
+        binding.livenessText.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                android.R.color.holo_red_light
+            )
+        )
+
+    }
+
+    override fun onTooFarFaceDetected(msg: String) {
+        binding.livenessText.text = "$msg \u274C"
+        binding.livenessText.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                android.R.color.holo_red_light
+            )
+        )
+
     }
 
 }

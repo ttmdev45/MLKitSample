@@ -13,4 +13,10 @@ interface FaceDetectionListener {
     fun onSuccessUpload(msg: String)
     fun onFailUpload(msg: String)
 
+    fun onNoFaceDetected(msg: String)
+    fun onMultipleFaceDetected(msg: String)
+    fun onFaceNotCentered(msg: String)
+    fun onTooFarFaceDetected(msg: String)
+
+
 }

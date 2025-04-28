@@ -1,11 +1,11 @@
 package com.example.mlkitsample.domain.model
 
 enum class FaceAction {
-   // BLINK,
+    BLINK,
     SMILE,
     HEAD_SHAKE,
-    LEFT_EYE_CLOSE,
-    RIGHT_EYE_CLOSE,
-    HEAD_NOD
+   // LEFT_EYE_CLOSE,
+   // RIGHT_EYE_CLOSE,
+  //  HEAD_NOD
 
 }
